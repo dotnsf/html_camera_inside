@@ -9,7 +9,7 @@
 <script>
 var cameraSize = { w: 360, h: 240 };
 var canvasSize = { w: 360, h: 240 };
-var resolution = { w: 1080, h: 720 };
+var resolution = { w: 540, h: 360 }; //{ w: 1080, h: 720 };
 var video = null;
 var media = null;
 var canvas = null;
@@ -60,7 +60,7 @@ function _canvasUpdate(){
   $('#debug').html( cnt );
 
   //. video to canvas(animation)
-  ctx.drawImage( video, 0, 0, canvas.width, canvas.height );
+  ctx.drawImage( video, 0, 0, canvas.width, canvas.height );  //. スマホブラウザだとキャンバスの内容が変わらない？？
   //requestAnimationFrame( _canvasUpdate );
 
   //. check QR code
