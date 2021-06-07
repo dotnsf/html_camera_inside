@@ -69,7 +69,8 @@ function _canvasUpdate(){
   if( result && result.data ){ 
     alert( result.data ); 
   }else{
-    setTimeout( _canvasUpdate, 500 );
+    requestAnimationFrame( _canvasUpdate );
+    //setTimeout( _canvasUpdate, 500 );
   }
 };
 
@@ -88,7 +89,7 @@ function isMobile(){
 </head>
 <body>
   <!-- video(invisible) -->
-  <div class="container" id="videoPreview">
+  <div class="container" id="videoPreview" style="text-align: center;">
     <h4>Video Preview</h4>
   </div>
 
