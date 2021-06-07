@@ -9,7 +9,7 @@
 <script>
 var cameraSize = { w: 360, h: 240 };
 var canvasSize = { w: 360, h: 240 };
-var resolution = { w: 540, h: 360 }; //{ w: 1080, h: 720 };
+var resolution = { w: 1080, h: 720 };
 var video = null;
 var media = null;
 var canvas = null;
@@ -24,10 +24,6 @@ $(function(){
   video.setAttribute( 'autoplay', true );  //. #1
   video.setAttribute( 'muted', '' );       //. #1
   video.setAttribute( 'playsinline', '' ); //. #1
-  if( !isAndroid() ){
-    video.width = cameraSize.h;
-    video.height = cameraSize.w;
-  }
   document.getElementById( 'videoPreview' ).appendChild( video );
 
   //. media
@@ -81,16 +77,6 @@ function _canvasUpdate(){
   }
 };
 
-function isAndroid(){
-  var b = false;
-  var ua = navigator.userAgent;
-  if( ( ua.indexOf('Android') > 0 ) && ua.indexOf( 'Mobile' ) > 0 ){
-    b = true;
-  }
-
-  return b;
-}
-
 function isMobile(){
   var b = false;
   var ua = navigator.userAgent;
@@ -106,7 +92,7 @@ function isMobile(){
 </head>
 <body>
   <!-- video(invisible) -->
-  <div class="container" id="videoPreview" style="text-align: center;">
+  <div class="container" id="videoPreview" style="text-align: center; display: none;">
     <h4>Video Preview</h4>
   </div>
 
