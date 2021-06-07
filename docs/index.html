@@ -24,13 +24,18 @@ $(function(){
   document.getElementById( 'videoPreview' ).appendChild( video );
 
   //. media
-  media = navigator.mediaDevices.getUserMedia({
+  var data = {
     audio: false,   //. no voice/mic
     video: {
+      facingMode: 'user',
       width: { ideal: resolution.w },
       height: { ideal: resolution.h }
     }
-  }).then( function( stream ){
+  };
+  if( isMobile() ){
+    data.video.facingMode = { exact: 'environment' };
+  }
+  media = navigator.mediaDevices.getUserMedia( data ).then( function( stream ){
     video.srcObject = stream;
   });
 
@@ -52,13 +57,27 @@ $(function(){
 function _canvasUpdate(){
   //. video to canvas(animation)
   ctx.drawImage( video, 0, 0, canvas.width, canvas.height );
-  requestAnimationFrame( _canvasUpdate );
+  //requestAnimationFrame( _canvasUpdate );
 
   //. check QR code
   var img = ctx.getImageData( 0, 0, canvas.width, canvas.height );
   var result = jsQR( img.data, img.width, img.height );
-  if( result && result.data ){ alert( result.data ); }
+  if( result && result.data ){ 
+    alert( result.data ); 
+  }else{
+    setTimeout( _canvasUpdate, 500 );
+  }
 };
+
+function isMobile(){
+  var b = false;
+  var ua = navigator.userAgent;
+  if( ( ua.indexOf('iPhone') > 0 || ua.indexOf('Android') > 0 ) && ua.indexOf( 'Mobile' ) > 0 ){
+    b = true;
+  }
+
+  return b;
+}
 </script>
 </head>
 <body>
