@@ -34,7 +34,7 @@ $(function(){
     }
   };
   if( isMobile() ){
-    data.video.facingMode = { exact: 'environment' };
+    data.video.facingMode = 'environment'; //{ exact: 'environment' };
   }
   media = navigator.mediaDevices.getUserMedia( data ).then( function( stream ){
     video.srcObject = stream;
