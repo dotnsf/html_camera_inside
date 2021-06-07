@@ -37,7 +37,10 @@ $(function(){
     data.video.facingMode = 'environment'; //{ exact: 'environment' };  //. front
   }
   media = navigator.mediaDevices.getUserMedia( data ).then( function( stream ){
+  //media = MediaDevices.getUserMedia( data ).then( function( stream ){
     video.srcObject = stream;
+  }).then( function( err ){
+    alert( JSON.stringify( err ) );
   });
 
   //. canvas
