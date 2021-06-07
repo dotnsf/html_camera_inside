@@ -21,9 +21,9 @@ $(function(){
   video.id = 'video';
   video.width = cameraSize.w;
   video.height = cameraSize.h;
-  video.autoplay = true;
-  video.muted = '';       //. #1
-  video.playsinline = ''; //. #1
+  video.setAttribute( 'autoplay', true );  //. #1
+  video.setAttribute( 'muted', '' );       //. #1
+  video.setAttribute( 'playsinline', '' ); //. #1
   document.getElementById( 'videoPreview' ).appendChild( video );
 
   //. media
