@@ -22,6 +22,8 @@ $(function(){
   video.width = cameraSize.w;
   video.height = cameraSize.h;
   video.autoplay = true;
+  video.muted = '';       //. #1
+  video.playsinline = ''; //. #1
   document.getElementById( 'videoPreview' ).appendChild( video );
 
   //. media
@@ -40,7 +42,8 @@ $(function(){
   //media = MediaDevices.getUserMedia( data ).then( function( stream ){
     video.srcObject = stream;
   }).then( function( err ){
-    alert( JSON.stringify( err ) );
+    //. 何故か一回はここが実行される？？ err = undefined
+    //alert( JSON.stringify( err ) );
   });
 
   //. canvas
