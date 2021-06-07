@@ -24,6 +24,10 @@ $(function(){
   video.setAttribute( 'autoplay', true );  //. #1
   video.setAttribute( 'muted', '' );       //. #1
   video.setAttribute( 'playsinline', '' ); //. #1
+  if( !isAndroid() ){
+    video.width = cameraSize.h;
+    video.height = cameraSize.w;
+  }
   document.getElementById( 'videoPreview' ).appendChild( video );
 
   //. media
@@ -39,7 +43,6 @@ $(function(){
     data.video.facingMode = 'environment'; //{ exact: 'environment' };  //. front
   }
   media = navigator.mediaDevices.getUserMedia( data ).then( function( stream ){
-  //media = MediaDevices.getUserMedia( data ).then( function( stream ){
     video.srcObject = stream;
   }).then( function( err ){
     //. 何故か一回はここが実行される？？ err = undefined
@@ -63,11 +66,10 @@ $(function(){
 //. render video stream into canvas
 function _canvasUpdate(){
   cnt ++;
-  $('#debug').html( cnt );
+  //$('#debug').html( cnt );
 
   //. video to canvas(animation)
   ctx.drawImage( video, 0, 0, canvas.width, canvas.height );  //. スマホブラウザだとキャンバスの内容が変わらない？？
-  //requestAnimationFrame( _canvasUpdate );
 
   //. check QR code
   var img = ctx.getImageData( 0, 0, canvas.width, canvas.height );
@@ -76,9 +78,18 @@ function _canvasUpdate(){
     alert( result.data ); 
   }else{
     requestAnimationFrame( _canvasUpdate );
-    //setTimeout( _canvasUpdate, 500 );
   }
 };
+
+function isAndroid(){
+  var b = false;
+  var ua = navigator.userAgent;
+  if( ( ua.indexOf('Android') > 0 ) && ua.indexOf( 'Mobile' ) > 0 ){
+    b = true;
+  }
+
+  return b;
+}
 
 function isMobile(){
   var b = false;
