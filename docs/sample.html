@@ -5,18 +5,118 @@
 <script src="//code.jquery.com/jquery-2.0.3.min.js"></script>
 <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.3.0/css/bootstrap.min.css" rel="stylesheet"/>
 <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.3.0/js/bootstrap.min.js"></script>
+<link href="//stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet"/>
+<script src="//cdn.jsdelivr.net/npm/jsqr@latest/dist/jsQR.min.js"></script>
 <script>
+var canvas = null;
+var ctx = null;
 $(function(){
+  canvas = document.getElementById( 'camera_canvas' );
+  ctx = canvas.getContext( '2d' );
+
+  var camera_image = document.getElementById( 'camera_image' );
+  camera_image.addEventListener( 'change', selectReadFile, false );
 });
+
+function selectReadFile( e ){
+  var file = e.target.files;
+  var reader = new FileReader();
+  reader.onload = function(){
+    readDrawImg( reader, canvas, 0, 0 );
+  }
+  reader.readAsDataURL( file[0] );
+}
+
+function readDrawImg( reader, canvas, x, y ){
+  var img = readImg( reader );
+  img.onload = function(){
+    var w = img.width;
+    var h = img.height;
+
+    // resize
+    var resize = resizeWidthHeight( 400, w, h );
+    drawImgOnCav( canvas, img, x, y, resize.w, resize.h );
+  }
+}
+
+function readImg( reader ){
+  var result_dataURL = reader.result;
+  var img = new Image();
+  img.src = result_dataURL;
+
+  return img;
+}
+
+function drawImgOnCav( canvas, img, x, y, w, h ){
+  canvas.width = w;
+  canvas.height = h;
+  ctx.drawImage( img, x, y, w, h );
+
+  checkQRCode();
+}
+
+function resizeWidthHeight( target_length_px, w0, h0 ){
+  var length = Math.max( w0, h0 );
+  if( length <= target_length_px ){
+    return({
+      flag: false,
+      w: w0,
+      h: h0
+    });
+  }
+
+  var w1;
+  var h1;
+  if( w0 >= h0 ){
+    w1 = target_length_px;
+    h1 = h0 * target_length_px / w0;
+  }else{
+    w1 = w0 * target_length_px / h0;
+    h1 = target_length_px;
+  }
+
+  return({
+    flag: true,
+    w: parseInt( w1 ),
+    h: parseInt( h1 )
+  });
+}
+
+function checkQRCode(){
+  decoded_code = null;
+  var imageData = ctx.getImageData( 0, 0, canvas.width, canvas.height );
+  var code = jsQR( imageData.data, canvas.width, canvas.height );
+  if( code ){
+    alert( code.data );
+  }
+}
 </script>
 <style>
+body{
+  background-color: #ccf;
+}
+label > input{
+  display: none;
+}
+label{
+  color: #aaa;
+  background-color: #07e;
+  padding: 10px;
+  border: double 4px #aaa;
+}
 </style>
 </head>
 <body>
-  <!-- video(invisible) -->
-  <div class="container" id="videoPreview" style="text-align: center;">
+  <div class="container" style="text-align: center;">
     <h4>Camera</h4>
-    <input type="file" accept="image/*; capture=camera"/>
+    <label for="camera_image">
+      <i class="fa fa-camera" aria-hidden="true"></i>
+      <input type="file" accept="image/*" capture="camera" id="camera_image"/>
+    </label>
+
+    <div id="camera_preview_div">
+      <canvas id="camera_canvas"></canvas>
+    </div>
   </div>
 </body>
 </html>
