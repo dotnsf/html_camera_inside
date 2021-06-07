@@ -28,13 +28,13 @@ $(function(){
   var data = {
     audio: false,   //. no voice/mic
     video: {
-      facingMode: 'user',
+      facingMode: 'user',  //. back
       width: { ideal: resolution.w },
       height: { ideal: resolution.h }
     }
   };
   if( isMobile() ){
-    data.video.facingMode = 'environment'; //{ exact: 'environment' };
+    data.video.facingMode = 'environment'; //{ exact: 'environment' };  //. front
   }
   media = navigator.mediaDevices.getUserMedia( data ).then( function( stream ){
     video.srcObject = stream;
@@ -88,7 +88,7 @@ function isMobile(){
 </head>
 <body>
   <!-- video(invisible) -->
-  <div class="container" id="videoPreview" style="display:none;">
+  <div class="container" id="videoPreview">
     <h4>Video Preview</h4>
   </div>
 
