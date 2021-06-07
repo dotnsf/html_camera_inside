@@ -14,6 +14,7 @@ var video = null;
 var media = null;
 var canvas = null;
 var ctx = null;
+var cnt = 0;
 $(function(){
   //. video
   video = document.createElement( 'video' );
@@ -55,6 +56,9 @@ $(function(){
 
 //. render video stream into canvas
 function _canvasUpdate(){
+  cnt ++;
+  $('#debug').html( cnt );
+
   //. video to canvas(animation)
   ctx.drawImage( video, 0, 0, canvas.width, canvas.height );
   //requestAnimationFrame( _canvasUpdate );
@@ -79,16 +83,21 @@ function isMobile(){
   return b;
 }
 </script>
+<style>
+</style>
 </head>
 <body>
-  <!-- video(invisible)-->
+  <!-- video(invisible) -->
   <div class="container" id="videoPreview" style="display:none;">
     <h4>Video Preview</h4>
   </div>
 
-  <!-- canvas(visible)-->
+  <!-- canvas(visible) -->
   <div class="container" id="canvasPreview" style="text-align: center;">
     <h4>Canvas Preview</h4>
   </div>
+
+  <!-- debug -->
+  <div id="debug"></div>
 </body>
 </html>
