@@ -1,0 +1,75 @@
+<html>
+<head>
+<meta charset="utf8"/>
+<title>HTML Camera Inside</title>
+<script src="//code.jquery.com/jquery-2.0.3.min.js"></script>
+<link href="//maxcdn.bootstrapcdn.com/bootstrap/4.3.0/css/bootstrap.min.css" rel="stylesheet"/>
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/4.3.0/js/bootstrap.min.js"></script>
+<script src="//cdn.jsdelivr.net/npm/jsqr@latest/dist/jsQR.min.js"></script>
+<script>
+var cameraSize = { w: 360, h: 240 };
+var canvasSize = { w: 360, h: 240 };
+var resolution = { w: 1080, h: 720 };
+var video = null;
+var media = null;
+var canvas = null;
+var ctx = null;
+$(function(){
+  //. video
+  video = document.createElement( 'video' );
+  video.id = 'video';
+  video.width = cameraSize.w;
+  video.height = cameraSize.h;
+  video.autoplay = true;
+  document.getElementById( 'videoPreview' ).appendChild( video );
+
+  //. media
+  media = navigator.mediaDevices.getUserMedia({
+    audio: false,   //. no voice/mic
+    video: {
+      width: { ideal: resolution.w },
+      height: { ideal: resolution.h }
+    }
+  }).then( function( stream ){
+    video.srcObject = stream;
+  });
+
+  //. canvas
+  canvas = document.createElement( 'canvas' );
+  canvas.id = 'canvas';
+  canvas.width = canvasSize.w;
+  canvas.height = canvasSize.h;
+  document.getElementById( 'canvasPreview' ).appendChild( canvas );
+
+  //. context
+  ctx = canvas.getContext( '2d' );
+
+  //. render video stream into canvas
+  _canvasUpdate();
+});
+
+//. render video stream into canvas
+function _canvasUpdate(){
+  //. video to canvas(animation)
+  ctx.drawImage( video, 0, 0, canvas.width, canvas.height );
+  requestAnimationFrame( _canvasUpdate );
+
+  //. check QR code
+  var img = ctx.getImageData( 0, 0, canvas.width, canvas.height );
+  var result = jsQR( img.data, img.width, img.height );
+  if( result && result.data ){ alert( result.data ); }
+};
+</script>
+</head>
+<body>
+  <!-- video(invisible)-->
+  <div class="container" id="videoPreview" style="display:none;">
+    <h4>Video Preview</h4>
+  </div>
+
+  <!-- canvas(visible)-->
+  <div class="container" id="canvasPreview" style="text-align: center;">
+    <h4>Canvas Preview</h4>
+  </div>
+</body>
+</html>
