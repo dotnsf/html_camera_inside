@@ -14,7 +14,6 @@ var video = null;
 var media = null;
 var canvas = null;
 var ctx = null;
-var cnt = 0;
 $(function(){
   //. video
   video = document.createElement( 'video' );
@@ -30,19 +29,17 @@ $(function(){
   var data = {
     audio: false,   //. no voice/mic
     video: {
-      facingMode: 'user',  //. back
+      facingMode: 'user',  //. front
       width: { ideal: resolution.w },
       height: { ideal: resolution.h }
     }
   };
   if( isMobile() ){
-    data.video.facingMode = 'environment'; //{ exact: 'environment' };  //. front
+    data.video.facingMode = 'environment'; //. back
   }
   media = navigator.mediaDevices.getUserMedia( data ).then( function( stream ){
     video.srcObject = stream;
   }).then( function( err ){
-    //. 何故か一回はここが実行される？？ err = undefined
-    //alert( JSON.stringify( err ) );
   });
 
   //. canvas
@@ -61,11 +58,8 @@ $(function(){
 
 //. render video stream into canvas
 function _canvasUpdate(){
-  cnt ++;
-  //$('#debug').html( cnt );
-
   //. video to canvas(animation)
-  ctx.drawImage( video, 0, 0, canvas.width, canvas.height );  //. スマホブラウザだとキャンバスの内容が変わらない？？
+  ctx.drawImage( video, 0, 0, canvas.width, canvas.height );
 
   //. check QR code
   var img = ctx.getImageData( 0, 0, canvas.width, canvas.height );
@@ -100,8 +94,5 @@ function isMobile(){
   <div class="container" id="canvasPreview" style="text-align: center;">
     <h4>Canvas Preview</h4>
   </div>
-
-  <!-- debug -->
-  <div id="debug"></div>
 </body>
 </html>
