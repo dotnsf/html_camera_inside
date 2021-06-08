@@ -66,6 +66,8 @@ function _canvasUpdate(){
   var img = ctx.getImageData( 0, 0, canvas.width, canvas.height );
   var result = jsQR( img.data, img.width, img.height );
   if( result && result.data ){ 
+    //. 座標は（<video> ではなく） <canvas> 内のもの
+    //. result.location = { bottomLeftCorner: { x: 226.021, y: 223.73 }, topRightCorder: { x: 284.70, y: 189.28 }, .. };
     alert( result.data ); 
   }else{
     requestAnimationFrame( _canvasUpdate );
